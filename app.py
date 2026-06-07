@@ -11,146 +11,141 @@ import polyline
 st.set_page_config(
     page_title="Buscador de Estaciones SISCONVE", 
     layout="wide", 
-    page_icon="⛽"
+    page_icon="⛽",
+    initial_sidebar_state="expanded"
 )
 
-# CSS para tema oscuro fijo
+# CSS completo para corregir todos los problemas de visibilidad
 st.markdown("""
 <style>
-    /* === TEMA OSCURO FIJO === */
-    .stApp, .main {
-        background: #0a0a0a !important;
-    }
-    .stMarkdown, .stText, p, li, label, .stSubheader, .stHeader, div, span {
-        color: #ffffff !important;
-    }
-    h1, h2, h3, h4 {
-        color: #ffffff !important;
-    }
-    h1 {
-        color: #2196F3 !important;
-    }
-    .stMetric {
-        background: #1a1a1a !important;
-        border-radius: 15px;
-        padding: 15px;
-        border: 1px solid #333333;
-    }
-    .stMetric label, .stMetric .stMetricValue {
-        color: #ffffff !important;
-    }
-    .stExpander {
-        background: #1a1a1a !important;
-        border: 1px solid #333333;
-        border-radius: 12px;
-    }
-    .streamlit-expanderHeader {
-        background-color: #1a1a1a !important;
-        color: #ffffff !important;
-    }
-    .stButton button {
-        background: #2d2d2d !important;
-        color: #ffffff !important;
-        border: 1px solid #444444 !important;
-        border-radius: 10px;
-    }
-    .stButton button:hover {
-        background: #3d3d3d !important;
-    }
-    .stButton button[kind="primary"] {
-        background: #2196F3 !important;
-        border: none !important;
-    }
-    .stButton button[kind="primary"]:hover {
-        background: #1976D2 !important;
-    }
-    .stSelectbox select, .stNumberInput input {
-        background-color: #1a1a1a !important;
-        border: 1px solid #444444 !important;
-        color: #ffffff !important;
-        border-radius: 10px;
-    }
-    .dataframe th {
-        background: #2d2d2d !important;
-        color: #ffffff !important;
-    }
-    .dataframe td {
-        background-color: #1a1a1a !important;
-        color: #e0e0e0 !important;
-        border-bottom: 1px solid #333333 !important;
-    }
+    /* ===== SIDEBAR ===== */
     [data-testid="stSidebar"] {
-        background: #0a0a0a !important;
-        border-right: 1px solid #333333 !important;
+        background-color: #e8eaef !important;
     }
+    
     [data-testid="stSidebar"] * {
-        color: #ffffff !important;
+        color: #000000 !important;
     }
-    .stSuccess {
-        background: #0a3d2e !important;
-        color: #ffffff !important;
-        border-left: 4px solid #4caf50 !important;
+    
+    [data-testid="stSidebar"] .stSelectbox label,
+    [data-testid="stSidebar"] .stNumberInput label,
+    [data-testid="stSidebar"] .stSlider label,
+    [data-testid="stSidebar"] .stCheckbox label,
+    [data-testid="stSidebar"] .stRadio label,
+    [data-testid="stSidebar"] .stHeader,
+    [data-testid="stSidebar"] h1,
+    [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3,
+    [data-testid="stSidebar"] .stMarkdown {
+        color: #000000 !important;
     }
-    .stWarning {
-        background: #3d2e0a !important;
-        color: #ffffff !important;
-        border-left: 4px solid #ff9800 !important;
+    
+    /* ===== SELECTORES (DROPDOWNS) ===== */
+    /* El campo del select */
+    [data-baseweb="select"] div {
+        background-color: white !important;
+        border-color: #cccccc !important;
     }
-    .stInfo {
-        background: #0a2e3d !important;
-        color: #ffffff !important;
-        border-left: 4px solid #2196f3 !important;
+    
+    [data-baseweb="select"] div div {
+        color: black !important;
     }
-    hr {
-        border-color: #333333 !important;
+    
+    /* Las opciones del dropdown */
+    div[data-baseweb="select"] ul {
+        background-color: white !important;
     }
-    .stCheckbox label span {
-        color: #ffffff !important;
+    
+    div[data-baseweb="select"] li {
+        color: black !important;
+        background-color: white !important;
     }
-    .stRadio label span {
-        color: #ffffff !important;
+    
+    div[data-baseweb="select"] li:hover {
+        background-color: #e0e0e0 !important;
     }
+    
+    /* Texto dentro del select */
+    .stSelectbox [data-testid="stMarkdown"] {
+        color: black !important;
+    }
+    
+    /* ===== INPUTS NUMÉRICOS ===== */
+    .stNumberInput input {
+        background-color: white !important;
+        color: black !important;
+        border: 1px solid #cccccc !important;
+    }
+    
+    /* Botones + y - del number input */
+    .stNumberInput button {
+        background-color: #e0e0e0 !important;
+        color: black !important;
+        border: 1px solid #cccccc !important;
+    }
+    
+    .stNumberInput button:hover {
+        background-color: #d0d0d0 !important;
+    }
+    
+    /* ===== SLIDER ===== */
     .stSlider label {
-        color: #ffffff !important;
+        color: black !important;
     }
-    .stProgress > div > div {
-        background-color: #333333 !important;
+    
+    /* ===== CHECKBOX ===== */
+    .stCheckbox label span {
+        color: black !important;
     }
-    .stProgress > div > div > div {
-        background-color: #2196F3 !important;
-        border-radius: 10px;
+    
+    /* ===== RADIO BUTTONS ===== */
+    .stRadio label span {
+        color: black !important;
     }
-    ::-webkit-scrollbar {
-        width: 8px;
-        background: #1a1a1a;
+    
+    /* ===== BOTONES ===== */
+    .stButton button {
+        background-color: #e0e0e0 !important;
+        color: black !important;
+        border: 1px solid #cccccc !important;
     }
-    ::-webkit-scrollbar-thumb {
-        background: #444444;
-        border-radius: 10px;
+    
+    .stButton button:hover {
+        background-color: #d0d0d0 !important;
     }
-    ::-webkit-scrollbar-thumb:hover {
-        background: #555555;
+    
+    .stButton button[kind="primary"] {
+        background-color: #1976D2 !important;
+        color: white !important;
     }
-    a {
-        color: #90caf9 !important;
-        text-decoration: none;
+    
+    .stButton button[kind="primary"]:hover {
+        background-color: #1565C0 !important;
     }
-    a:hover {
-        text-decoration: underline;
+    
+    /* ===== WIDGETS EN GENERAL ===== */
+    .stSelectbox, .stNumberInput, .stDateInput, .stTextInput {
+        color: black !important;
     }
-</style>
-""", unsafe_allow_html=True)
-
-# CSS responsivo
-st.markdown("""
-<style>
-    @media (max-width: 768px) {
-        .stExpander {
-            margin-bottom: 10px;
-        }
-        .stMetric {
-            text-align: center;
-        }
+    
+    /* ===== TEXTOS EN SIDEBAR ===== */
+    .sidebar-content, .css-1d391kg, .css-163ttbj, .eczjsme3 {
+        color: black !important;
+    }
+    
+    /* ===== MARCADORES DE AYUDA ===== */
+    .stSelectbox .st-ae {
+        color: black !important;
+    }
+    
+    /* ===== TOOLTIPS ===== */
+    .stTooltipIcon svg {
+        fill: black !important;
+    }
+    
+    /* ===== SEPARADORES ===== */
+    hr {
+        border-color: #cccccc !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -283,11 +278,11 @@ ciudades_uruguay = {
 
 df_estaciones = load_data()
 
-# --- BARRA LATERAL ---
+# ==================== BARRA LATERAL ====================
 st.sidebar.header("📍 Tu Ubicación Actual")
 
 if st.sidebar.button("📍 Usar mi ubicación actual (GPS)", type="primary", use_container_width=True):
-    with st.spinner("Obteniendo ubicación por GPS... ⛅"):
+    with st.spinner("Obteniendo ubicación por GPS..."):
         gps_location = get_gps_location()
         if gps_location and gps_location.get('lat') and gps_location.get('lon'):
             st.session_state['lat_input'] = gps_location['lat']
@@ -298,6 +293,7 @@ if st.sidebar.button("📍 Usar mi ubicación actual (GPS)", type="primary", use
             st.sidebar.error("❌ No se pudo obtener la ubicación.")
 
 st.sidebar.markdown("---")
+
 ciudad_seleccionada = st.sidebar.selectbox("O selecciona una ciudad:", list(ciudades_uruguay.keys()))
 if ciudad_seleccionada != "Seleccionar ciudad..." and ciudades_uruguay[ciudad_seleccionada]:
     st.session_state['lat_input'], st.session_state['lon_input'] = ciudades_uruguay[ciudad_seleccionada]
@@ -337,7 +333,7 @@ tipo_distancia = st.sidebar.radio(
 )
 usar_osrm = (tipo_distancia == "Distancia por carretera (OSRM)")
 
-# --- PROCESAMIENTO PRINCIPAL ---
+# ==================== PROCESAMIENTO PRINCIPAL ====================
 mascara = pd.Series(True, index=df_estaciones.index)
 if filtro_super: mascara &= df_estaciones['Super 30-S_bool']
 if filtro_premium: mascara &= df_estaciones['Premium 30-S_bool']
@@ -399,7 +395,7 @@ with st.spinner("Calculando distancias óptimas..."):
     elif ordenar_por == "Nombre (A-Z)":
         df_resultados = df_resultados.sort_values('Concesionario')
 
-# --- PANEL DE ESTADÍSTICAS ---
+# ==================== PANEL DE ESTADÍSTICAS ====================
 st.markdown("---")
 col_stats1, col_stats2, col_stats3, col_stats4 = st.columns(4)
 with col_stats1:
@@ -415,12 +411,12 @@ with col_stats4:
     st.metric(label="✨ Con Premium 30-S", value=f"{con_premium}/{len(df_resultados)}")
 st.markdown("---")
 
-# --- SUGERENCIA INTELIGENTE ---
+# ==================== SUGERENCIA INTELIGENTE ====================
 mejor_estacion = sugerir_mejor_estacion(df_resultados)
 if mejor_estacion is not None:
     st.success(f"💡 **Sugerencia inteligente:** {mejor_estacion['Concesionario']} es la mejor opción considerando distancia y disponibilidad de combustibles premium.")
 
-# --- COMPARACIÓN DE ESTACIONES ---
+# ==================== COMPARACIÓN DE ESTACIONES ====================
 if len(df_resultados) > 1:
     st.subheader("🔄 Comparar Estaciones")
     estaciones_a_comparar = st.multiselect("Selecciona hasta 3 estaciones para comparar:", options=df_resultados['Concesionario'].tolist(), max_selections=3)
@@ -438,7 +434,7 @@ if len(df_resultados) > 1:
             })
         st.table(pd.DataFrame(comparacion_data))
 
-# --- INTERFAZ PRINCIPAL DE RESULTADOS ---
+# ==================== INTERFAZ PRINCIPAL DE RESULTADOS ====================
 col1, col2 = st.columns([1, 1])
 
 with col1:
@@ -511,7 +507,7 @@ with col2:
     except Exception as e:
         st.error(f"Error al cargar el mapa: {str(e)}")
 
-# --- TABLA DETALLADA ---
+# ==================== TABLA DETALLADA ====================
 st.subheader("📊 Tabla Comparativa Detallada")
 df_display = df_resultados[['Concesionario', 'Departamento', 'Localidad', 'Direccion', 'Distancia (km)', 'Super 30-S', 'Premium 30-S', 'Gasoil 50-S', 'Gasoil 10-S', 'Teléfono']].copy()
 if usar_osrm and 'Distancia_haversine' in df_resultados.columns:
@@ -523,12 +519,13 @@ if mostrar_en_metros:
     df_display.drop('Distancia (km)', axis=1, inplace=True)
 st.dataframe(df_display, use_container_width=True, hide_index=True)
 
-# --- EXPORTACIÓN ---
+# ==================== EXPORTACIÓN ====================
 st.subheader("💾 Exportar Resultados")
 csv_data = df_resultados[['Concesionario', 'Departamento', 'Localidad', 'Direccion', 'Teléfono', 'Distancia (km)', 'Super 30-S', 'Premium 30-S', 'Gasoil 50-S', 'Gasoil 10-S']].copy()
 csv_data['Distancia (km)'] = csv_data['Distancia (km)'].round(2)
 st.download_button(label="📥 Descargar Reporte Completo (CSV)", data=csv_data.to_csv(index=False, sep=';', decimal=','), file_name=f"estaciones_sisconve_{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}.csv", mime="text/csv")
 
+# ==================== FOOTER ====================
 st.markdown("---")
 st.caption("✨ **Características:** GPS nativo | Enrutamiento OSRM | Comparación de estaciones | Sugerencia inteligente | Mapas interactivos")
 
