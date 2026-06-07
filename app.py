@@ -6,7 +6,6 @@ import folium
 from streamlit_folium import st_folium
 import requests
 import polyline
-import json
 
 # Configuración de la página
 st.set_page_config(
@@ -16,22 +15,104 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# CSS básico para visibilidad
+# CSS para mejor visibilidad (colores más suaves)
 st.markdown("""
 <style>
+    /* Sidebar con mejor contraste */
     [data-testid="stSidebar"] {
-        background-color: #f0f2f6 !important;
+        background-color: #e8eaef !important;
     }
+    
     [data-testid="stSidebar"] * {
-        color: #000000 !important;
+        color: #1a1a1a !important;
     }
-    .stSelectbox div[data-baseweb="select"] div {
+    
+    /* Títulos en sidebar */
+    [data-testid="stSidebar"] h1, 
+    [data-testid="stSidebar"] h2, 
+    [data-testid="stSidebar"] h3,
+    [data-testid="stSidebar"] .stHeader {
+        color: #1a1a1a !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Selectores - fondo blanco, texto negro */
+    .stSelectbox div[data-baseweb="select"] > div {
         background-color: white !important;
-        color: black !important;
+        border: 1px solid #cccccc !important;
     }
+    
+    .stSelectbox div[data-baseweb="select"] div {
+        color: #1a1a1a !important;
+    }
+    
+    /* Opciones del dropdown */
+    div[data-baseweb="select"] ul {
+        background-color: white !important;
+    }
+    
+    div[data-baseweb="select"] li {
+        color: #1a1a1a !important;
+        background-color: white !important;
+    }
+    
+    div[data-baseweb="select"] li:hover {
+        background-color: #e0e0e0 !important;
+    }
+    
+    /* Inputs numéricos */
     .stNumberInput input {
         background-color: white !important;
-        color: black !important;
+        color: #1a1a1a !important;
+        border: 1px solid #cccccc !important;
+    }
+    
+    /* Botón GPS personalizado */
+    .gps-button {
+        background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%) !important;
+        color: white !important;
+        border: none !important;
+        padding: 12px !important;
+        font-size: 16px !important;
+        font-weight: bold !important;
+        border-radius: 8px !important;
+        cursor: pointer !important;
+        width: 100% !important;
+        margin-bottom: 20px !important;
+        transition: all 0.3s ease !important;
+    }
+    .gps-button:hover {
+        background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+    }
+    
+    /* Botón GPS en móvil */
+    @media (max-width: 768px) {
+        .gps-button {
+            padding: 14px !important;
+            font-size: 18px !important;
+        }
+    }
+    
+    /* Checkboxes */
+    .stCheckbox label span {
+        color: #1a1a1a !important;
+    }
+    
+    /* Radio buttons */
+    .stRadio label span {
+        color: #1a1a1a !important;
+    }
+    
+    /* Slider */
+    .stSlider label {
+        color: #1a1a1a !important;
+    }
+    
+    /* Separadores */
+    hr {
+        border-color: #cccccc !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -48,76 +129,6 @@ if 'lon_input' not in st.session_state:
     st.session_state['lon_input'] = -56.1645
 if 'map_zoom' not in st.session_state:
     st.session_state['map_zoom'] = 12
-if 'gps_obtenido' not in st.session_state:
-    st.session_state['gps_obtenido'] = False
-
-# HTML y JavaScript para GPS (funciona sin librerías externas)
-gps_js = """
-<script>
-function obtenerGPS() {
-    if (!navigator.geolocation) {
-        alert("Tu navegador no soporta geolocalización");
-        return;
-    }
-    
-    navigator.geolocation.getCurrentPosition(
-        function(position) {
-            var lat = position.coords.latitude;
-            var lon = position.coords.longitude;
-            var accuracy = position.coords.accuracy;
-            
-            // Actualizar los campos de Streamlit
-            var latInput = parent.document.querySelector('input[aria-label="Latitud:"]');
-            var lonInput = parent.document.querySelector('input[aria-label="Longitud:"]');
-            
-            if (latInput && lonInput) {
-                latInput.value = lat.toFixed(6);
-                lonInput.value = lon.toFixed(6);
-                
-                // Disparar eventos para que Streamlit detecte el cambio
-                latInput.dispatchEvent(new Event('input', { bubbles: true }));
-                lonInput.dispatchEvent(new Event('input', { bubbles: true }));
-                
-                alert("Ubicación obtenida!\\nLatitud: " + lat.toFixed(6) + "\\nLongitud: " + lon.toFixed(6) + "\\nPrecisión: ±" + Math.round(accuracy) + "m");
-                
-                // Recargar la página
-                setTimeout(function() {
-                    location.reload();
-                }, 1000);
-            } else {
-                alert("No se encontraron los campos de coordenadas");
-            }
-        },
-        function(error) {
-            var mensaje = "";
-            switch(error.code) {
-                case error.PERMISSION_DENIED:
-                    mensaje = "Permiso denegado. Activa la ubicación en tu navegador.";
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    mensaje = "Información de ubicación no disponible.";
-                    break;
-                case error.TIMEOUT:
-                    mensaje = "Tiempo de espera agotado.";
-                    break;
-                default:
-                    mensaje = "Error desconocido.";
-                    break;
-            }
-            alert("Error GPS: " + mensaje);
-        },
-        {
-            enableHighAccuracy: true,
-            timeout: 10000,
-            maximumAge: 0
-        }
-    );
-}
-</script>
-"""
-
-# Inyectar JavaScript
-st.components.v1.html(gps_js, height=0)
 
 # Funciones auxiliares
 def haversine_vectorized(lat1, lon1, lat2, lon2):
@@ -211,23 +222,41 @@ df_estaciones = load_data()
 # ==================== BARRA LATERAL ====================
 st.sidebar.header("📍 Tu Ubicación Actual")
 
-# Botón GPS con JavaScript
-gps_button_html = """
-<button onclick="obtenerGPS()" style="
-    width: 100%;
-    padding: 10px;
-    background-color: #1976D2;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-bottom: 10px;
-">
-    📍 Usar mi ubicación actual (GPS)
-</button>
-"""
-st.sidebar.markdown(gps_button_html, unsafe_allow_html=True)
+# Botón GPS con streamlit_js_eval (la forma correcta para Streamlit)
+try:
+    from streamlit_js_eval import streamlit_js_eval, get_geolocation
+    
+    if st.sidebar.button("📍 Usar mi ubicación actual (GPS)", type="primary", use_container_width=True):
+        with st.spinner("Obteniendo ubicación por GPS..."):
+            location = get_geolocation()
+            if location and location.get('coords'):
+                lat = location['coords']['latitude']
+                lon = location['coords']['longitude']
+                accuracy = location['coords']['accuracy']
+                st.session_state['lat_input'] = lat
+                st.session_state['lon_input'] = lon
+                st.sidebar.success(f"✅ Ubicación obtenida!\nLat: {lat:.6f}\nLon: {lon:.6f}\nPrecisión: ±{accuracy:.0f}m")
+                st.rerun()
+            else:
+                st.sidebar.error("❌ No se pudo obtener la ubicación. Verifica los permisos del navegador.")
+except ImportError:
+    # Fallback: botón HTML si no está instalado streamlit_js_eval
+    st.sidebar.markdown("""
+    <div style="text-align: center;">
+        <p style="color: #ff6b6b; font-size: 12px;">
+            ⚠️ Para usar GPS, instala: pip install streamlit-js-eval
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Botón de ayuda
+    if st.sidebar.button("ℹ️ Cómo activar el GPS", use_container_width=True):
+        st.sidebar.info("""
+        **Para usar el GPS en tu móvil:**
+        1. Acepta los permisos de ubicación cuando el navegador lo solicite
+        2. Si usas iPhone, ve a Configuración > Privacidad > Localización
+        3. Asegúrate de que Chrome o Safari tengan permisos de ubicación
+        """)
 
 st.sidebar.markdown("---")
 
@@ -412,4 +441,4 @@ csv_data['Distancia (km)'] = csv_data['Distancia (km)'].round(2)
 st.download_button("📥 Descargar CSV", data=csv_data.to_csv(index=False, sep=';'), file_name=f"estaciones_{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}.csv", mime="text/csv")
 
 st.markdown("---")
-st.caption("📍 **GPS:** Haz clic en 'Usar mi ubicación actual' y permite el acceso a la ubicación cuando el navegador lo solicite")
+st.caption("📍 **GPS:** Haz clic en 'Usar mi ubicación actual' y permite el acceso a la ubicación")
