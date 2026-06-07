@@ -14,141 +14,136 @@ st.set_page_config(
     page_icon="⛽"
 )
 
-# Inicialización de tema en session_state
-if 'tema_oscuro' not in st.session_state:
-    st.session_state['tema_oscuro'] = False
-
-# Aplicar tema según session_state (debe ir antes que cualquier otro elemento)
-if st.session_state['tema_oscuro']:
-    st.markdown("""
-    <style>
-        /* Tema Oscuro */
-        .stApp {
-            background-color: #0e1117;
-        }
-        .main {
-            background-color: #0e1117;
-        }
-        .stMarkdown, .stText, .stSubheader, .stHeader, h1, h2, h3, p, label {
-            color: #fafafa !important;
-        }
-        .stExpander {
-            background-color: #1e1e1e;
-            border: 1px solid #2d2d2d;
-        }
-        .stExpander .streamlit-expanderHeader {
-            background-color: #1e1e1e;
-            color: #fafafa !important;
-        }
-        .stButton button {
-            background-color: #2d2d2d;
-            color: #ffffff;
-            border: 1px solid #404040;
-        }
-        .stButton button:hover {
-            background-color: #404040;
-            border-color: #606060;
-        }
-        .stMetric {
-            background-color: #1e1e1e;
-            border-radius: 10px;
-            padding: 10px;
-        }
-        .stMetric label, .stMetric .stMetricValue {
-            color: #fafafa !important;
-        }
-        .stDataFrame {
-            background-color: #1e1e1e;
-        }
-        .stDataFrame table {
-            color: #fafafa;
-        }
-        .stAlert {
-            background-color: #2d2d2d;
-        }
-        .stWarning {
-            background-color: #332700;
-        }
-        .stSuccess {
-            background-color: #0e3d2e;
-        }
-        .stInfo {
-            background-color: #1e3a5f;
-        }
-        hr {
-            border-color: #2d2d2d;
-        }
-        .stSelectbox select {
-            background-color: #1e1e1e;
-            color: #fafafa;
-            border-color: #2d2d2d;
-        }
-        .stNumberInput input {
-            background-color: #1e1e1e;
-            color: #fafafa;
-            border-color: #2d2d2d;
-        }
-        .stCheckbox label {
-            color: #fafafa !important;
-        }
-        .stSlider label {
-            color: #fafafa !important;
-        }
-        .stRadio label {
-            color: #fafafa !important;
-        }
-        iframe {
-            background-color: #1e1e1e;
-        }
-        .stProgress > div > div {
-            background-color: #2d2d2d;
-        }
-        .stProgress > div > div > div {
-            background-color: #1976D2;
-        }
-        .stDownloadButton button {
-            background-color: #2d2d2d;
-            color: #ffffff;
-        }
-        .stDownloadButton button:hover {
-            background-color: #404040;
-        }
-        /* Scrollbar personalizada */
-        ::-webkit-scrollbar {
-            width: 12px;
-            background-color: #1e1e1e;
-        }
-        ::-webkit-scrollbar-thumb {
-            background-color: #2d2d2d;
-            border-radius: 6px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background-color: #404040;
-        }
-    </style>
-    """, unsafe_allow_html=True)
-else:
-    st.markdown("""
-    <style>
-        /* Tema Claro (mejoras adicionales) */
-        .stMetric {
-            background-color: #f0f2f6;
-            border-radius: 10px;
-            padding: 10px;
-        }
-        .stProgress > div > div > div {
-            background-color: #1976D2;
-        }
-        .stDownloadButton button:hover {
-            background-color: #e0e0e0;
-        }
-    </style>
-    """, unsafe_allow_html=True)
-
-# CSS personalizado para ambos temas
+# CSS para tema oscuro fijo
 st.markdown("""
 <style>
-    /* Mejorar espaciado en móviles */
+    /* === TEMA OSCURO FIJO === */
+    .stApp, .main {
+        background: #0a0a0a !important;
+    }
+    .stMarkdown, .stText, p, li, label, .stSubheader, .stHeader, div, span {
+        color: #ffffff !important;
+    }
+    h1, h2, h3, h4 {
+        color: #ffffff !important;
+    }
+    h1 {
+        color: #2196F3 !important;
+    }
+    .stMetric {
+        background: #1a1a1a !important;
+        border-radius: 15px;
+        padding: 15px;
+        border: 1px solid #333333;
+    }
+    .stMetric label, .stMetric .stMetricValue {
+        color: #ffffff !important;
+    }
+    .stExpander {
+        background: #1a1a1a !important;
+        border: 1px solid #333333;
+        border-radius: 12px;
+    }
+    .streamlit-expanderHeader {
+        background-color: #1a1a1a !important;
+        color: #ffffff !important;
+    }
+    .stButton button {
+        background: #2d2d2d !important;
+        color: #ffffff !important;
+        border: 1px solid #444444 !important;
+        border-radius: 10px;
+    }
+    .stButton button:hover {
+        background: #3d3d3d !important;
+    }
+    .stButton button[kind="primary"] {
+        background: #2196F3 !important;
+        border: none !important;
+    }
+    .stButton button[kind="primary"]:hover {
+        background: #1976D2 !important;
+    }
+    .stSelectbox select, .stNumberInput input {
+        background-color: #1a1a1a !important;
+        border: 1px solid #444444 !important;
+        color: #ffffff !important;
+        border-radius: 10px;
+    }
+    .dataframe th {
+        background: #2d2d2d !important;
+        color: #ffffff !important;
+    }
+    .dataframe td {
+        background-color: #1a1a1a !important;
+        color: #e0e0e0 !important;
+        border-bottom: 1px solid #333333 !important;
+    }
+    [data-testid="stSidebar"] {
+        background: #0a0a0a !important;
+        border-right: 1px solid #333333 !important;
+    }
+    [data-testid="stSidebar"] * {
+        color: #ffffff !important;
+    }
+    .stSuccess {
+        background: #0a3d2e !important;
+        color: #ffffff !important;
+        border-left: 4px solid #4caf50 !important;
+    }
+    .stWarning {
+        background: #3d2e0a !important;
+        color: #ffffff !important;
+        border-left: 4px solid #ff9800 !important;
+    }
+    .stInfo {
+        background: #0a2e3d !important;
+        color: #ffffff !important;
+        border-left: 4px solid #2196f3 !important;
+    }
+    hr {
+        border-color: #333333 !important;
+    }
+    .stCheckbox label span {
+        color: #ffffff !important;
+    }
+    .stRadio label span {
+        color: #ffffff !important;
+    }
+    .stSlider label {
+        color: #ffffff !important;
+    }
+    .stProgress > div > div {
+        background-color: #333333 !important;
+    }
+    .stProgress > div > div > div {
+        background-color: #2196F3 !important;
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar {
+        width: 8px;
+        background: #1a1a1a;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #444444;
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555555;
+    }
+    a {
+        color: #90caf9 !important;
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# CSS responsivo
+st.markdown("""
+<style>
     @media (max-width: 768px) {
         .stExpander {
             margin-bottom: 10px;
@@ -157,36 +152,13 @@ st.markdown("""
             text-align: center;
         }
     }
-    
-    /* Hover effect en filas de tabla */
-    .dataframe tr:hover {
-        background-color: rgba(0,0,0,0.05);
-        transition: 0.3s;
-    }
-    
-    /* Animación para expanders */
-    .streamlit-expanderHeader {
-        transition: all 0.3s ease;
-    }
-    .streamlit-expanderHeader:hover {
-        background-color: rgba(0,0,0,0.05);
-    }
-    
-    /* Badges para información */
-    .info-badge {
-        display: inline-block;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: bold;
-        margin: 2px;
-    }
 </style>
 """, unsafe_allow_html=True)
 
-# Título y descripción
+# Título
 st.title("⛽ Buscador de Estaciones de Combustible más Cercanas")
 st.write("Introduce tu ubicación actual para encontrar las estaciones de servicio más cercanas dentro de la red SISCONVE.")
+st.markdown("---")
 
 # Inicialización de Session State
 if 'lat_input' not in st.session_state:
@@ -198,7 +170,6 @@ if 'map_zoom' not in st.session_state:
 
 # Funciones auxiliares
 def haversine_vectorized(lat1, lon1, lat2, lon2):
-    """Calcula distancia en línea recta usando fórmula de Haversine"""
     lat1, lon1, lat2, lon2 = map(np.radians, [lat1, lon1, lat2, lon2])
     dlat = lat2 - lat1
     dlon = lon2 - lon1
@@ -209,12 +180,10 @@ def haversine_vectorized(lat1, lon1, lat2, lon2):
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def get_osrm_route(origin_lat, origin_lon, dest_lat, dest_lon):
-    """Consulta la API de OSRM para obtener la ruta real por carretera"""
     try:
         url = f"http://router.project-osrm.org/route/v1/driving/{origin_lon},{origin_lat};{dest_lon},{dest_lat}"
         params = {"overview": "full", "geometries": "polyline", "steps": "false"}
         response = requests.get(url, params=params, timeout=7)
-        
         if response.status_code == 200:
             data = response.json()
             if data['code'] == 'Ok' and data['routes']:
@@ -228,7 +197,6 @@ def get_osrm_route(origin_lat, origin_lon, dest_lat, dest_lon):
         return None, None, None
 
 def get_gps_location():
-    """Obtiene la ubicación actual del usuario usando el GPS del navegador"""
     try:
         from streamlit_js_eval import streamlit_js_eval
         location = streamlit_js_eval(
@@ -258,19 +226,15 @@ def validar_coordenadas_uruguay(lat, lon):
     return (-35.5 <= lat <= -30.0) and (-58.5 <= lon <= -53.0)
 
 def generar_enlace_google_maps(origin_lat, origin_lon, dest_lat, dest_lon):
-    """Genera enlace de Google Maps con la ruta"""
     return f"https://www.google.com/maps/dir/{origin_lat},{origin_lon}/{dest_lat},{dest_lon}"
 
 def sugerir_mejor_estacion(df_resultados):
-    """Sugiere la mejor estación basada en distancia y combustible"""
     if df_resultados.empty:
         return None
-    
     df_temp = df_resultados.copy()
     max_dist = df_temp['Distancia (km)'].max()
     if max_dist == 0:
         max_dist = 1
-    
     df_temp['score'] = (
         (1 - (df_temp['Distancia (km)'] / max_dist)) * 0.6 +
         (df_temp['Premium 30-S_bool'].astype(int) + df_temp['Super 30-S_bool'].astype(int)) / 2 * 0.4
@@ -293,7 +257,6 @@ def load_data():
         st.error(f"❌ Error al cargar datos: {e}")
         st.stop()
 
-# Diccionario de ciudades
 ciudades_uruguay = {
     "Seleccionar ciudad...": None,
     "Montevideo": (-34.9011, -56.1645),
@@ -321,19 +284,8 @@ ciudades_uruguay = {
 df_estaciones = load_data()
 
 # --- BARRA LATERAL ---
-st.sidebar.header("🎨 Apariencia")
-col_tema1, col_tema2 = st.sidebar.columns([3, 1])
-with col_tema1:
-    st.write("Tema actual:", "🌙 Oscuro" if st.session_state['tema_oscuro'] else "☀️ Claro")
-with col_tema2:
-    if st.button("🌙" if not st.session_state['tema_oscuro'] else "☀️", help="Cambiar tema"):
-        st.session_state['tema_oscuro'] = not st.session_state['tema_oscuro']
-        st.rerun()
-
-st.sidebar.markdown("---")
 st.sidebar.header("📍 Tu Ubicación Actual")
 
-# Botón GPS
 if st.sidebar.button("📍 Usar mi ubicación actual (GPS)", type="primary", use_container_width=True):
     with st.spinner("Obteniendo ubicación por GPS... ⛅"):
         gps_location = get_gps_location()
@@ -346,13 +298,10 @@ if st.sidebar.button("📍 Usar mi ubicación actual (GPS)", type="primary", use
             st.sidebar.error("❌ No se pudo obtener la ubicación.")
 
 st.sidebar.markdown("---")
-
-# Selector de ciudad
 ciudad_seleccionada = st.sidebar.selectbox("O selecciona una ciudad:", list(ciudades_uruguay.keys()))
 if ciudad_seleccionada != "Seleccionar ciudad..." and ciudades_uruguay[ciudad_seleccionada]:
     st.session_state['lat_input'], st.session_state['lon_input'] = ciudades_uruguay[ciudad_seleccionada]
 
-# Coordenadas
 lat_usuario = st.sidebar.number_input("Latitud:", format="%.6f", key="lat_input")
 lon_usuario = st.sidebar.number_input("Longitud:", format="%.6f", key="lon_input")
 
@@ -360,8 +309,6 @@ if not validar_coordenadas_uruguay(lat_usuario, lon_usuario):
     st.sidebar.warning("⚠️ Coordenadas fuera de Uruguay")
 
 st.sidebar.markdown("---")
-
-# Filtros de combustible
 st.sidebar.header("🔍 Filtros de Combustible")
 filtro_super = st.sidebar.checkbox("Requiere Súper 30-S", value=False)
 filtro_premium = st.sidebar.checkbox("Requiere Premium 30-S", value=False)
@@ -370,22 +317,10 @@ filtro_gasoil10 = st.sidebar.checkbox("Requiere Gasoil 10-S", value=False)
 
 st.sidebar.markdown("---")
 st.sidebar.header("🎯 Filtros Avanzados")
-
-# Filtro por departamento
 departamentos = ['Todos'] + sorted(df_estaciones['Departamento'].unique().tolist())
 filtro_departamento = st.sidebar.selectbox("Departamento:", departamentos)
-
-# Filtro por distancia máxima
-rango_distancia = st.sidebar.slider(
-    "Radio de búsqueda máximo (km):",
-    min_value=5, max_value=200, value=100, step=5
-)
-
-# Ordenamiento
-ordenar_por = st.sidebar.selectbox(
-    "Ordenar por:",
-    ["Distancia (más cercana)", "Distancia (más lejana)", "Nombre (A-Z)"]
-)
+rango_distancia = st.sidebar.slider("Radio de búsqueda máximo (km):", min_value=5, max_value=200, value=100, step=5)
+ordenar_por = st.sidebar.selectbox("Ordenar por:", ["Distancia (más cercana)", "Distancia (más lejana)", "Nombre (A-Z)"])
 
 st.sidebar.markdown("---")
 st.sidebar.header("🔢 Resultados")
@@ -403,7 +338,6 @@ tipo_distancia = st.sidebar.radio(
 usar_osrm = (tipo_distancia == "Distancia por carretera (OSRM)")
 
 # --- PROCESAMIENTO PRINCIPAL ---
-# Aplicar filtros
 mascara = pd.Series(True, index=df_estaciones.index)
 if filtro_super: mascara &= df_estaciones['Super 30-S_bool']
 if filtro_premium: mascara &= df_estaciones['Premium 30-S_bool']
@@ -418,20 +352,14 @@ if df_filtrado.empty:
     st.warning("⚠️ No se encontraron estaciones con los filtros seleccionados.")
     st.stop()
 
-# Calcular distancias
 with st.spinner("Calculando distancias óptimas..."):
     df_filtrado['Distancia_haversine'] = haversine_vectorized(
         lat_usuario, lon_usuario, df_filtrado['Latitud'].values, df_filtrado['Longitud'].values
     )
-    
-    # Filtrar por distancia máxima
     df_filtrado = df_filtrado[df_filtrado['Distancia_haversine'] <= rango_distancia]
-    
     if df_filtrado.empty:
         st.warning(f"⚠️ No hay estaciones en un radio de {rango_distancia} km.")
         st.stop()
-    
-    # Seleccionar candidatos
     df_candidatos = df_filtrado.sort_values('Distancia_haversine').head(top_k * 3).copy()
     
     if usar_osrm:
@@ -440,7 +368,6 @@ with st.spinner("Calculando distancias óptimas..."):
         rutas_geometria = []
         progress_bar = st.progress(0)
         status_text = st.empty()
-        
         for idx, (_, estacion) in enumerate(df_candidatos.iterrows()):
             status_text.text(f"Consultando ruta {idx+1}/{len(df_candidatos)}...")
             dist_real, duracion, geometria = get_osrm_route(
@@ -455,10 +382,8 @@ with st.spinner("Calculando distancias óptimas..."):
                 duraciones.append(None)
                 rutas_geometria.append(None)
             progress_bar.progress((idx + 1) / len(df_candidatos))
-        
         progress_bar.empty()
         status_text.empty()
-        
         df_candidatos['Distancia (km)'] = distancias_reales
         df_candidatos['Duracion_min'] = duraciones
         df_candidatos['Ruta_geometria'] = rutas_geometria
@@ -467,7 +392,6 @@ with st.spinner("Calculando distancias óptimas..."):
         df_resultados = df_candidatos.head(top_k).copy()
         df_resultados['Distancia (km)'] = df_resultados['Distancia_haversine']
     
-    # Aplicar ordenamiento
     if ordenar_por == "Distancia (más cercana)":
         df_resultados = df_resultados.sort_values('Distancia (km)')
     elif ordenar_por == "Distancia (más lejana)":
@@ -478,30 +402,17 @@ with st.spinner("Calculando distancias óptimas..."):
 # --- PANEL DE ESTADÍSTICAS ---
 st.markdown("---")
 col_stats1, col_stats2, col_stats3, col_stats4 = st.columns(4)
-
 with col_stats1:
-    st.metric(
-        label="📍 Estaciones encontradas", 
-        value=len(df_resultados),
-        delta=f"Radio {df_resultados['Distancia (km)'].max():.1f} km"
-    )
-
+    st.metric(label="📍 Estaciones encontradas", value=len(df_resultados), delta=f"Radio {df_resultados['Distancia (km)'].max():.1f} km")
 with col_stats2:
     estacion_mas_cercana = df_resultados.iloc[0]
-    st.metric(
-        label="🚗 Estación más cercana", 
-        value=estacion_mas_cercana['Concesionario'][:25],
-        delta=f"{estacion_mas_cercana['Distancia (km)']:.1f} km"
-    )
-
+    st.metric(label="🚗 Estación más cercana", value=estacion_mas_cercana['Concesionario'][:25], delta=f"{estacion_mas_cercana['Distancia (km)']:.1f} km")
 with col_stats3:
     con_super = df_resultados['Super 30-S_bool'].sum()
     st.metric(label="⛽ Con Súper 30-S", value=f"{con_super}/{len(df_resultados)}")
-
 with col_stats4:
     con_premium = df_resultados['Premium 30-S_bool'].sum()
     st.metric(label="✨ Con Premium 30-S", value=f"{con_premium}/{len(df_resultados)}")
-
 st.markdown("---")
 
 # --- SUGERENCIA INTELIGENTE ---
@@ -512,12 +423,7 @@ if mejor_estacion is not None:
 # --- COMPARACIÓN DE ESTACIONES ---
 if len(df_resultados) > 1:
     st.subheader("🔄 Comparar Estaciones")
-    estaciones_a_comparar = st.multiselect(
-        "Selecciona hasta 3 estaciones para comparar:",
-        options=df_resultados['Concesionario'].tolist(),
-        max_selections=3
-    )
-    
+    estaciones_a_comparar = st.multiselect("Selecciona hasta 3 estaciones para comparar:", options=df_resultados['Concesionario'].tolist(), max_selections=3)
     if estaciones_a_comparar:
         df_comparacion = df_resultados[df_resultados['Concesionario'].isin(estaciones_a_comparar)]
         comparacion_data = []
@@ -538,48 +444,36 @@ col1, col2 = st.columns([1, 1])
 with col1:
     tipo_texto = "por ruta" if usar_osrm else "en línea recta"
     st.subheader(f"🔝 Las {len(df_resultados)} estaciones más cercanas ({tipo_texto})")
-    
     for idx, fila in df_resultados.iterrows():
         if mostrar_en_metros and fila['Distancia (km)'] < 1:
             distancia_texto = f"{fila['Distancia (km)'] * 1000:.0f} metros"
         else:
             distancia_texto = f"{fila['Distancia (km)']:.2f} km"
-        
         with st.expander(f"📍 {fila['Concesionario']} — {distancia_texto}", expanded=(idx==0)):
             col_a, col_b = st.columns([2, 1])
-            
             with col_a:
                 st.markdown(f"**📬 Dirección:** {fila['Direccion']}")
                 st.markdown(f"**📍 Ubicación:** {fila['Localidad']}, {fila['Departamento']}")
                 st.markdown(f"**📞 Teléfono:** {fila['Teléfono'] if pd.notna(fila['Teléfono']) else 'No disponible'}")
-                
                 if usar_osrm and 'Duracion_min' in fila and fila['Duracion_min']:
                     st.markdown(f"**⏱️ Tiempo estimado:** {fila['Duracion_min']:.0f} minutos")
-                
                 if usar_osrm and 'Distancia_haversine' in fila:
                     diff = abs(fila['Distancia (km)'] - fila['Distancia_haversine'])
                     if diff > 1:
                         st.caption(f"ℹ️ Desvío por calles: La ruta real es {diff:.1f} km más larga que la línea recta.")
-            
             with col_b:
-                # Barra de progreso de distancia relativa
                 distancia_relativa = (fila['Distancia (km)'] / df_resultados['Distancia (km)'].max()) * 100
                 st.progress(1 - (distancia_relativa/100), text=f"🚗 Distancia relativa")
-            
             st.markdown("**⛽ Combustibles disponibles:**")
             col_f1, col_f2, col_f3, col_f4 = st.columns(4)
             col_f1.markdown("✅ **Súper**" if fila['Super 30-S_bool'] else "❌ Súper")
             col_f2.markdown("✅ **Premium**" if fila['Premium 30-S_bool'] else "❌ Premium")
             col_f3.markdown("✅ **Gasoil 50**" if fila['Gasoil 50-S_bool'] else "❌ Gasoil 50")
             col_f4.markdown("✅ **Gasoil 10**" if fila['Gasoil 10-S_bool'] else "❌ Gasoil 10")
-            
-            # Enlaces a mapas
             st.markdown("---")
             col_link1, col_link2 = st.columns(2)
             with col_link1:
-                google_maps_link = generar_enlace_google_maps(
-                    lat_usuario, lon_usuario, fila['Latitud'], fila['Longitud']
-                )
+                google_maps_link = generar_enlace_google_maps(lat_usuario, lon_usuario, fila['Latitud'], fila['Longitud'])
                 st.markdown(f"[🗺️ Abrir ruta en Google Maps]({google_maps_link})")
             with col_link2:
                 waze_link = f"https://waze.com/ul?ll={fila['Latitud']},{fila['Longitud']}&navigate=yes"
@@ -587,136 +481,57 @@ with col1:
 
 with col2:
     st.subheader("🗺️ Mapa de Ubicación")
-    
     try:
-        # Crear mapa base
-        mapa = folium.Map(
-            location=[lat_usuario, lon_usuario], 
-            zoom_start=st.session_state.get('map_zoom', 12), 
-            control_scale=True
-        )
-        
-        # Marcador de origen
-        folium.Marker(
-            [lat_usuario, lon_usuario], 
-            popup='<b>📍 Tu ubicación</b>',
-            icon=folium.Icon(color='blue', icon='info-sign'),
-            tooltip="Tu ubicación"
-        ).add_to(mapa)
-        
+        mapa = folium.Map(location=[lat_usuario, lon_usuario], zoom_start=st.session_state.get('map_zoom', 12), control_scale=True)
+        folium.Marker([lat_usuario, lon_usuario], popup='<b>📍 Tu ubicación</b>', icon=folium.Icon(color='blue', icon='info-sign')).add_to(mapa)
         coordenadas_puntos = [[lat_usuario, lon_usuario]]
-        
-        # Agregar marcadores de estaciones
         for _, estacion in df_resultados.iterrows():
-            # Determinar color del marcador
-            if estacion['Super 30-S_bool'] and estacion['Premium 30-S_bool']:
-                color = 'green'
-            elif estacion['Super 30-S_bool']:
-                color = 'orange'
-            else:
-                color = 'red'
-            
-            dist_text = f"{estacion['Distancia (km)']:.1f} km"
-            
+            color = 'green' if (estacion['Super 30-S_bool'] and estacion['Premium 30-S_bool']) else ('orange' if estacion['Super 30-S_bool'] else 'red')
             popup_html = f"""
-            <div style='font-family: sans-serif; font-size: 12px; min-width: 200px;'>
+            <div style='font-family: sans-serif; font-size: 12px;'>
                 <b>{estacion['Concesionario']}</b><br>
-                <b>🚗 Distancia:</b> {dist_text}<br>
-                🏢 {estacion['Direccion'][:50]}<br>
-                📍 {estacion['Localidad']}, {estacion['Departamento']}<br>
-                <hr style='margin:8px 0;'>
-                ⛽ <b>Combustibles:</b><br>
-                • Súper 30-S: {'✅' if estacion['Super 30-S_bool'] else '❌'}<br>
-                • Premium 30-S: {'✅' if estacion['Premium 30-S_bool'] else '❌'}<br>
-                • Gasoil 50-S: {'✅' if estacion['Gasoil 50-S_bool'] else '❌'}<br>
-                • Gasoil 10-S: {'✅' if estacion['Gasoil 10-S_bool'] else '❌'}
+                <b>🚗 Distancia:</b> {estacion['Distancia (km)']:.1f} km<br>
+                🏢 {estacion['Direccion'][:50]}
             </div>
             """
-            
-            folium.Marker(
-                [estacion['Latitud'], estacion['Longitud']], 
-                popup=folium.Popup(popup_html, max_width=300),
-                icon=folium.Icon(color=color, icon='glyphicon glyphicon-dashboard'),
-                tooltip=f"{estacion['Concesionario']} - {dist_text}"
-            ).add_to(mapa)
-            
+            folium.Marker([estacion['Latitud'], estacion['Longitud']], popup=folium.Popup(popup_html, max_width=250), icon=folium.Icon(color=color, icon='glyphicon glyphicon-dashboard')).add_to(mapa)
             coordenadas_puntos.append([estacion['Latitud'], estacion['Longitud']])
-            
-            # Agregar ruta si está disponible
             if usar_osrm and 'Ruta_geometria' in estacion and estacion['Ruta_geometria']:
                 try:
                     coords = polyline.decode(estacion['Ruta_geometria'])
                     if coords and len(coords) > 1:
-                        folium.PolyLine(
-                            coords, 
-                            color='#2196F3', 
-                            weight=3, 
-                            opacity=0.6,
-                            popup=f"Ruta: {dist_text}"
-                        ).add_to(mapa)
+                        folium.PolyLine(coords, color='#2196F3', weight=3, opacity=0.6).add_to(mapa)
                 except:
                     pass
-        
-        # Ajustar vista del mapa
         if len(coordenadas_puntos) > 1:
             lats = [p[0] for p in coordenadas_puntos]
             lons = [p[1] for p in coordenadas_puntos]
-            bounds = [[min(lats), min(lons)], [max(lats), max(lons)]]
-            mapa.fit_bounds(bounds, padding=(30, 30))
-        
+            mapa.fit_bounds([[min(lats), min(lons)], [max(lats), max(lons)]], padding=(30, 30))
         st_folium(mapa, use_container_width=True, height=500, returned_objects=[])
-        
     except Exception as e:
         st.error(f"Error al cargar el mapa: {str(e)}")
-        st.info("💡 Puedes usar los enlaces a Google Maps o Waze para ver las rutas.")
 
 # --- TABLA DETALLADA ---
 st.subheader("📊 Tabla Comparativa Detallada")
-
-df_display = df_resultados[['Concesionario', 'Departamento', 'Localidad', 'Direccion', 
-                            'Distancia (km)', 'Super 30-S', 'Premium 30-S', 
-                            'Gasoil 50-S', 'Gasoil 10-S', 'Teléfono']].copy()
-
+df_display = df_resultados[['Concesionario', 'Departamento', 'Localidad', 'Direccion', 'Distancia (km)', 'Super 30-S', 'Premium 30-S', 'Gasoil 50-S', 'Gasoil 10-S', 'Teléfono']].copy()
 if usar_osrm and 'Distancia_haversine' in df_resultados.columns:
     df_display['Distancia Lineal (km)'] = df_resultados['Distancia_haversine'].round(2)
-
 if usar_osrm and 'Duracion_min' in df_resultados.columns:
     df_display['Tiempo (min)'] = df_resultados['Duracion_min'].round(0).fillna(0).astype(int)
-
 if mostrar_en_metros:
     df_display['Distancia'] = df_display['Distancia (km)'].apply(lambda x: f"{x*1000:.0f} m" if x < 1 else f"{x:.2f} km")
     df_display.drop('Distancia (km)', axis=1, inplace=True)
-
 st.dataframe(df_display, use_container_width=True, hide_index=True)
 
 # --- EXPORTACIÓN ---
 st.subheader("💾 Exportar Resultados")
+csv_data = df_resultados[['Concesionario', 'Departamento', 'Localidad', 'Direccion', 'Teléfono', 'Distancia (km)', 'Super 30-S', 'Premium 30-S', 'Gasoil 50-S', 'Gasoil 10-S']].copy()
+csv_data['Distancia (km)'] = csv_data['Distancia (km)'].round(2)
+st.download_button(label="📥 Descargar Reporte Completo (CSV)", data=csv_data.to_csv(index=False, sep=';', decimal=','), file_name=f"estaciones_sisconve_{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}.csv", mime="text/csv")
 
-col_export1, col_export2, col_export3 = st.columns([1, 1, 1])
-
-with col_export2:
-    csv_data = df_resultados[['Concesionario', 'Departamento', 'Localidad', 'Direccion', 
-                              'Teléfono', 'Distancia (km)', 'Super 30-S', 'Premium 30-S', 
-                              'Gasoil 50-S', 'Gasoil 10-S']].copy()
-    
-    if usar_osrm and 'Duracion_min' in df_resultados.columns:
-        csv_data['Tiempo_estimado_min'] = df_resultados['Duracion_min'].round(0).fillna(0).astype(int)
-    
-    csv_data['Distancia (km)'] = csv_data['Distancia (km)'].round(2)
-    
-    st.download_button(
-        label="📥 Descargar Reporte Completo (CSV)",
-        data=csv_data.to_csv(index=False, sep=';', decimal=','),
-        file_name=f"estaciones_sisconve_{pd.Timestamp.now().strftime('%Y%m%d_%H%M%S')}.csv",
-        mime="text/csv",
-        use_container_width=True
-    )
-
-# Footer
 st.markdown("---")
-st.caption("✨ **Características:** GPS nativo | Enrutamiento OSRM | Comparación de estaciones | Sugerencia inteligente | Mapas interactivos | Tema oscuro/claro")
+st.caption("✨ **Características:** GPS nativo | Enrutamiento OSRM | Comparación de estaciones | Sugerencia inteligente | Mapas interactivos")
 
-# Información adicional expandible
 with st.expander("ℹ️ Información del Sistema"):
     st.write(f"**Total de estaciones en base de datos:** {len(df_estaciones)}")
     st.write(f"**Departamentos con cobertura:** {df_estaciones['Departamento'].nunique()}")
