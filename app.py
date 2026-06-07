@@ -14,7 +14,138 @@ st.set_page_config(
     page_icon="⛽"
 )
 
-# CSS personalizado para mejor UI
+# Inicialización de tema en session_state
+if 'tema_oscuro' not in st.session_state:
+    st.session_state['tema_oscuro'] = False
+
+# Aplicar tema según session_state (debe ir antes que cualquier otro elemento)
+if st.session_state['tema_oscuro']:
+    st.markdown("""
+    <style>
+        /* Tema Oscuro */
+        .stApp {
+            background-color: #0e1117;
+        }
+        .main {
+            background-color: #0e1117;
+        }
+        .stMarkdown, .stText, .stSubheader, .stHeader, h1, h2, h3, p, label {
+            color: #fafafa !important;
+        }
+        .stExpander {
+            background-color: #1e1e1e;
+            border: 1px solid #2d2d2d;
+        }
+        .stExpander .streamlit-expanderHeader {
+            background-color: #1e1e1e;
+            color: #fafafa !important;
+        }
+        .stButton button {
+            background-color: #2d2d2d;
+            color: #ffffff;
+            border: 1px solid #404040;
+        }
+        .stButton button:hover {
+            background-color: #404040;
+            border-color: #606060;
+        }
+        .stMetric {
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            padding: 10px;
+        }
+        .stMetric label, .stMetric .stMetricValue {
+            color: #fafafa !important;
+        }
+        .stDataFrame {
+            background-color: #1e1e1e;
+        }
+        .stDataFrame table {
+            color: #fafafa;
+        }
+        .stAlert {
+            background-color: #2d2d2d;
+        }
+        .stWarning {
+            background-color: #332700;
+        }
+        .stSuccess {
+            background-color: #0e3d2e;
+        }
+        .stInfo {
+            background-color: #1e3a5f;
+        }
+        hr {
+            border-color: #2d2d2d;
+        }
+        .stSelectbox select {
+            background-color: #1e1e1e;
+            color: #fafafa;
+            border-color: #2d2d2d;
+        }
+        .stNumberInput input {
+            background-color: #1e1e1e;
+            color: #fafafa;
+            border-color: #2d2d2d;
+        }
+        .stCheckbox label {
+            color: #fafafa !important;
+        }
+        .stSlider label {
+            color: #fafafa !important;
+        }
+        .stRadio label {
+            color: #fafafa !important;
+        }
+        iframe {
+            background-color: #1e1e1e;
+        }
+        .stProgress > div > div {
+            background-color: #2d2d2d;
+        }
+        .stProgress > div > div > div {
+            background-color: #1976D2;
+        }
+        .stDownloadButton button {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        .stDownloadButton button:hover {
+            background-color: #404040;
+        }
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar {
+            width: 12px;
+            background-color: #1e1e1e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #2d2d2d;
+            border-radius: 6px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #404040;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+else:
+    st.markdown("""
+    <style>
+        /* Tema Claro (mejoras adicionales) */
+        .stMetric {
+            background-color: #f0f2f6;
+            border-radius: 10px;
+            padding: 10px;
+        }
+        .stProgress > div > div > div {
+            background-color: #1976D2;
+        }
+        .stDownloadButton button:hover {
+            background-color: #e0e0e0;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
+# CSS personalizado para ambos temas
 st.markdown("""
 <style>
     /* Mejorar espaciado en móviles */
@@ -29,7 +160,7 @@ st.markdown("""
     
     /* Hover effect en filas de tabla */
     .dataframe tr:hover {
-        background-color: #f0f2f6;
+        background-color: rgba(0,0,0,0.05);
         transition: 0.3s;
     }
     
@@ -38,7 +169,17 @@ st.markdown("""
         transition: all 0.3s ease;
     }
     .streamlit-expanderHeader:hover {
-        background-color: #f0f2f6;
+        background-color: rgba(0,0,0,0.05);
+    }
+    
+    /* Badges para información */
+    .info-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+        margin: 2px;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -137,17 +278,6 @@ def sugerir_mejor_estacion(df_resultados):
     mejor = df_temp.loc[df_temp['score'].idxmax()]
     return mejor
 
-def color_distancia(val):
-    """Colorea las distancias en la tabla"""
-    if isinstance(val, (int, float)):
-        if val < 10:
-            return 'background-color: #90EE90'
-        elif val < 50:
-            return 'background-color: #FFD700'
-        else:
-            return 'background-color: #FFA07A'
-    return ''
-
 @st.cache_data
 def load_data():
     if not os.path.exists('ESTACIONES_SISCONVE_LIMPIO.csv'):
@@ -191,6 +321,16 @@ ciudades_uruguay = {
 df_estaciones = load_data()
 
 # --- BARRA LATERAL ---
+st.sidebar.header("🎨 Apariencia")
+col_tema1, col_tema2 = st.sidebar.columns([3, 1])
+with col_tema1:
+    st.write("Tema actual:", "🌙 Oscuro" if st.session_state['tema_oscuro'] else "☀️ Claro")
+with col_tema2:
+    if st.button("🌙" if not st.session_state['tema_oscuro'] else "☀️", help="Cambiar tema"):
+        st.session_state['tema_oscuro'] = not st.session_state['tema_oscuro']
+        st.rerun()
+
+st.sidebar.markdown("---")
 st.sidebar.header("📍 Tu Ubicación Actual")
 
 # Botón GPS
@@ -530,7 +670,7 @@ with col2:
         st.error(f"Error al cargar el mapa: {str(e)}")
         st.info("💡 Puedes usar los enlaces a Google Maps o Waze para ver las rutas.")
 
-# --- TABLA DETALLADA CON COLORES ---
+# --- TABLA DETALLADA ---
 st.subheader("📊 Tabla Comparativa Detallada")
 
 df_display = df_resultados[['Concesionario', 'Departamento', 'Localidad', 'Direccion', 
@@ -546,10 +686,6 @@ if usar_osrm and 'Duracion_min' in df_resultados.columns:
 if mostrar_en_metros:
     df_display['Distancia'] = df_display['Distancia (km)'].apply(lambda x: f"{x*1000:.0f} m" if x < 1 else f"{x:.2f} km")
     df_display.drop('Distancia (km)', axis=1, inplace=True)
-    col_distancia = 'Distancia'
-else:
-    df_display['Distancia (km)'] = df_display['Distancia (km)'].apply(lambda x: f"{x:.2f} km")
-    col_distancia = 'Distancia (km)'
 
 st.dataframe(df_display, use_container_width=True, hide_index=True)
 
@@ -578,7 +714,7 @@ with col_export2:
 
 # Footer
 st.markdown("---")
-st.caption("✨ **Características:** GPS nativo | Enrutamiento OSRM | Comparación de estaciones | Sugerencia inteligente | Mapas interactivos")
+st.caption("✨ **Características:** GPS nativo | Enrutamiento OSRM | Comparación de estaciones | Sugerencia inteligente | Mapas interactivos | Tema oscuro/claro")
 
 # Información adicional expandible
 with st.expander("ℹ️ Información del Sistema"):
